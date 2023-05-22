@@ -11,7 +11,8 @@ build-backend = "setuptools.build_meta"
 # write_to = "pytroll-runner/version.py"
 
 [project.scripts]
-pytroll-runner = "message_writer:main"
+sub_and_write = "message_writer:main"
+generate_list_from_files = "message_writer:"
 
 [tool.ruff]
 select = ["E", "W", "F", "I", "D", "S", "B", "A", "PT", "Q", "TID"]
