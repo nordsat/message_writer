@@ -1,25 +1,41 @@
+"""Test the message writer.
+
+Example config::
+
+  subscriber_settings:
+    nameserver: false
+    addresses: ipc://bla
+  filename: /data/list_of_files.json
+  area_file: /some/where/areas.yaml
+
+"""
+
+import argparse
 import json
+from contextlib import closing
 
 import yaml
 from posttroll.message import datetime_encoder
 from posttroll.subscriber import create_subscriber_from_dict_config
 from pyresample.area_config import load_area
-from contextlib import closing
 from trollsift.parser import Parser
-import argparse
+
 
 def write_message_to_file(msg, filename, area_file):
+    """Write a message to a json file."""
     with open(filename, "w") as fd:
         json.dump([message_to_json(area_file, msg.data)],
                   fd, default=datetime_encoder)
 
 
 def message_to_json(area_file, info):
+    """Write a message to json format."""
     area = load_area(area_file, info["area"])
     return dict_from_info(info, area)
 
 
 def append_message_to_file(msg, filename, area_file):
+    """Append a message to a file (existing or not)."""
     try:
         with open(filename) as fd:
             data = json.load(fd)
@@ -29,13 +45,16 @@ def append_message_to_file(msg, filename, area_file):
     with open(filename, "w") as fd:
         json.dump(data, fd, default=datetime_encoder)
 
+
 def subscribe_and_write(filename, area_file, subscriber_settings):
+    """Subscribe and write."""
     with closing(create_subscriber_from_dict_config(subscriber_settings)) as sub:
         for message in sub.recv():
             append_message_to_file(message, filename, area_file)
 
 
 def read_config(yaml_file):
+    """Read a config file."""
     with open(yaml_file) as fd:
         data = yaml.safe_load(fd.read())
     return data
@@ -55,10 +74,12 @@ def parse_args(args=None):
                                      description="Write message into a json file for wms")
     parser.add_argument("config_file",
                         help="The configuration file to run on.")
-    parser.add_argument('files', nargs='*', action='store')
+    parser.add_argument("files", nargs="*", action="store")
     return parser.parse_args(args)
 
+
 def create_list_from_files(filename, area_file, filepattern, list_of_files):
+    """Create list from provided files."""
     parser = Parser(filepattern)
     data = []
     for f in list_of_files:
@@ -71,6 +92,7 @@ def create_list_from_files(filename, area_file, filepattern, list_of_files):
 
 
 def dict_from_info(info, area):
+    """Create the required dict from info."""
     return {"uri": info["uri"],
             "layer": info["product"],
             "start_time": info["start_time"],
@@ -80,7 +102,7 @@ def dict_from_info(info, area):
 
 
 def files_to_list(args=None):
-    """Main script."""
+    """Script for files to list."""
     parsed_args = parse_args(args=args)
     config = read_config(parsed_args.config_file)
 
