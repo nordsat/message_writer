@@ -69,7 +69,7 @@ def test_write_message_to_file(filename, area_file):
     info = data[0]
     assert info["uri"] == msg.data["uri"]
     assert info["layer"] == msg.data["product"]
-    assert info["start_time"] == "2023-05-22T10:45:00"
+    assert info["start_time"] == "2023-05-22T10:45:00Z"
     np.testing.assert_allclose(info["area_extent"], [-2717181.73, -5571048.14, 1378818.26, -1475048.14])
     assert set(info["proj4"].split()) == set("+proj=stere +lat_0=90 +lat_ts=60 +lon_0=14 +x_0=0 +y_0=0 +ellps=bessel "
                                              "+units=m +no_defs +type=crs".split())

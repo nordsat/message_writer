@@ -15,10 +15,17 @@ import json
 from contextlib import closing
 
 import yaml
-from posttroll.message import datetime_encoder
 from posttroll.subscriber import create_subscriber_from_dict_config
 from pyresample.area_config import load_area
 from trollsift.parser import Parser
+
+
+def datetime_encoder(obj):
+    """Encodes datetimes into iso format."""
+    try:
+        return obj.isoformat() + "Z"
+    except AttributeError:
+        raise TypeError(repr(obj) + " is not JSON serializable")  # noqa
 
 
 def write_message_to_file(msg, filename, area_file):
