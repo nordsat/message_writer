@@ -24,8 +24,8 @@ def datetime_encoder(obj):
     """Encodes datetimes into iso format."""
     try:
         return obj.isoformat() + "Z"
-    except AttributeError:
-        raise TypeError(repr(obj) + " is not JSON serializable")  # noqa
+    except AttributeError as exc:
+        raise TypeError(repr(obj) + " is not JSON serializable") from exc
 
 
 def write_message_to_file(msg, filename, area_file):
