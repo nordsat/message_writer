@@ -96,7 +96,7 @@ def create_list_from_files(filename, area_file, filepattern, list_of_files):
     parser = Parser(filepattern)
     data = []
     for f in list_of_files:
-        info = parser.parse(f, full_match=False)
+        info = parser.parse(f)
         info["uri"] = f
         area = load_area(area_file, info["area"])
         data.append(dict_from_info(info, area))
