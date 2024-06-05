@@ -9,25 +9,25 @@ docker build -t message-worker .
 
 2. create the configuration file
 Configuration file for the script has the following information:
-  - output file name path, for example `/usr/local/bin/message-writer/list-of-files.json`
+  - output file name path, for example `/tmp/list-of-files.json`
   - area file path (taken from https://github.com/pytroll/satpy/blob/main/satpy/etc/areas.yaml)
-  - filepattern, for example `{start_time:%Y%m%d_%H%M}_{platform_name}_{area}_{product}.tif`
+  - filepattern, for example `/eodata/fci-out/{start_time:%Y%m%d_%H%M}_{platform_name}_{area}_{product}.tif`
 
 Example file called `config_fci.yaml`:
 ```bash
-filename: /usr/local/bin/message-writer/list-of-files.json
+filename: /tmp/list-of-files.json
 area_file:  /usr/local/bin/message-writer/areas.yaml
-filepattern: /usr/local/bin/message-writer/fci-data/{start_time:%Y%m%d_%H%M}_{platform_name}_{area}_{product}.tif
+filepattern: /eodata/fci-out/{start_time:%Y%m%d_%H%M}_{platform_name}_{area}_{product}.tif
 ```
   
 3. Enter interactive mode of the container mounting the `area file`, the `configuration file` (from point 2) and the actual products created with satpy
 ```
-docker run -it -v ./config_fci.yaml:/usr/local/bin/message-writer/config_fci.yaml -v ./create_file.py:/usr/local/bin/message-writer/create_file.py -v /home/murdaca/fci-data/:/eodata/fci-out  message-worker /bin/bash
+docker run -it -v ./config_fci.yaml:/usr/local/bin/message-writer/config_fci.yaml -v /tmp/:/tmp/ -v /home/murdaca/fci-data/:/eodata/fci-out  message-worker /bin/bash
 ```
 
 4. run the following command:
 ```
-python3 create_file.py config_fci.yaml /eodata/fci-out/*tif
+python3 create_file.py config_fci.yaml /eodata/fci-out/
 ```
 
 Example output of the json (formatted):
