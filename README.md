@@ -6,8 +6,13 @@ Create json file to be used by the WMS server.
 ```
 docker build -t message-worker .
 ```
+2. Download area file
 
-2. create the configuration file
+```
+wget https://github.com/pytroll/satpy/blob/main/satpy/etc/areas.yaml
+```
+
+3. create the configuration file
 Configuration file for the script has the following information:
   - output file name path, for example `/tmp/list-of-files.json`
   - area file path (taken from https://github.com/pytroll/satpy/blob/main/satpy/etc/areas.yaml)
@@ -20,12 +25,12 @@ area_file:  /usr/local/bin/message-writer/areas.yaml
 filepattern: /eodata/fci-out/{start_time:%Y%m%d_%H%M}_{platform_name}_{area}_{product}.tif
 ```
   
-3. Enter interactive mode of the container mounting the `area file`, the `configuration file` (from point 2) and the actual products created with satpy
+4. Enter interactive mode of the container mounting the `area file`, the `configuration file` (from point 2) and the actual products created with satpy
 ```
-docker run -it -v ./config_fci.yaml:/usr/local/bin/message-writer/config_fci.yaml -v /tmp/:/tmp/ -v /home/murdaca/fci-data/:/eodata/fci-out  message-worker /bin/bash
+docker run -it -v ./areas.yaml:/usr/local/bin/message-writer/areas.yaml -v ./config_fci.yaml:/usr/local/bin/message-writer/config_fci.yaml -v /tmp/:/tmp/ -v /home/murdaca/fci-data/:/eodata/fci-out  message-worker /bin/bash
 ```
 
-4. run the following command:
+5. run the following command:
 ```
 python3 create_file.py config_fci.yaml /eodata/fci-out/
 ```
