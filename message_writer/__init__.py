@@ -12,12 +12,17 @@ Example config::
 
 import argparse
 import json
+import pathlib
+import logging
 from contextlib import closing
 
 import yaml
 from posttroll.subscriber import create_subscriber_from_dict_config
 from pyresample.area_config import load_area
 from trollsift.parser import Parser
+
+_LOGGER = logging.getLogger("message-writer")
+logging.basicConfig(level=logging.INFO)
 
 
 def datetime_encoder(obj):
@@ -71,6 +76,7 @@ def main(args=None):
     """Main script."""
     parsed_args = parse_args(args=args)
     config = read_config(parsed_args.config_file)
+    _LOGGER.info(config)
     subscribe_and_write(config["filename"],
                         config["area_file"],
                         config["subscriber_settings"])
@@ -112,5 +118,8 @@ def files_to_list(args=None):
     """Script for files to list."""
     parsed_args = parse_args(args=args)
     config = read_config(parsed_args.config_file)
-
-    create_list_from_files(config["filename"], config["area_file"], config["filepattern"], parsed_args.files)
+    _LOGGER.info(config)
+    full_paths = []
+    for path in parsed_args.files:
+        full_paths = [str(p) for p in pathlib.Path(path).iterdir() if p.is_file()]
+    create_list_from_files(config["filename"], config["area_file"], config["filepattern"], full_paths)

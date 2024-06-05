@@ -1,0 +1,4 @@
+posttroll>=1.10.0
+pyaml
+pyresample
+trollsift
