@@ -22,12 +22,12 @@ filepattern: /usr/local/bin/message-writer/fci-data/{start_time:%Y%m%d_%H%M}_{pl
   
 3. Enter interactive mode of the container mounting the `area file`, the `configuration file` (from point 2) and the actual products created with satpy
 ```
-docker run -it -v ./config_fci.yaml:/usr/local/bin/message-writer/config_fci.yaml -v ./create_file.py:/usr/local/bin/message-writer/create_file.py -v /home/murdaca/fci-data/:/usr/local/bin/message-writer/fci-data  message-worker /bin/bash
+docker run -it -v ./config_fci.yaml:/usr/local/bin/message-writer/config_fci.yaml -v ./create_file.py:/usr/local/bin/message-writer/create_file.py -v /home/murdaca/fci-data/:/eodata/fci-out  message-worker /bin/bash
 ```
 
 4. run the following command:
 ```
-python3 create_file.py config_fci.yaml /usr/local/bin/message-writer/fci-data/*tif
+python3 create_file.py config_fci.yaml /eodata/fci-out/*tif
 ```
 
 Example output of the json (formatted):
