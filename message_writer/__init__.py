@@ -12,6 +12,7 @@ Example config::
 
 import argparse
 import json
+import pathlib
 from contextlib import closing
 
 import yaml
@@ -71,6 +72,7 @@ def main(args=None):
     """Main script."""
     parsed_args = parse_args(args=args)
     config = read_config(parsed_args.config_file)
+    print(config)
     subscribe_and_write(config["filename"],
                         config["area_file"],
                         config["subscriber_settings"])
@@ -90,7 +92,8 @@ def create_list_from_files(filename, area_file, filepattern, list_of_files):
     parser = Parser(filepattern)
     data = []
     for f in list_of_files:
-        info = parser.parse(f)
+        print(f"parsing file called: {f}")
+        info = parser.parse(f, full_match=False)
         info["uri"] = f
         area = load_area(area_file, info["area"])
         data.append(dict_from_info(info, area))
@@ -112,5 +115,8 @@ def files_to_list(args=None):
     """Script for files to list."""
     parsed_args = parse_args(args=args)
     config = read_config(parsed_args.config_file)
-
-    create_list_from_files(config["filename"], config["area_file"], config["filepattern"], parsed_args.files)
+    print(config)
+    full_paths = []
+    for path in parsed_args.files:
+        full_paths = [str(p) for p in pathlib.Path(path).iterdir() if p.is_file()]
+    create_list_from_files(config["filename"], config["area_file"], config["filepattern"], full_paths)
