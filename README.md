@@ -25,17 +25,12 @@ area_file:  /usr/local/bin/message-writer/areas.yaml
 filepattern: /eodata/fci-out/{start_time:%Y%m%d_%H%M}_{platform_name}_{area}_{product}.tif
 ```
   
-4. Enter interactive mode of the container mounting the `area file`, the `configuration file` (from point 2) and the actual products created with satpy
+4. Run the container mounting the `area file`, the `configuration file` (from point 2) and the actual products created with satpy
 ```
-docker run -it -v ./areas.yaml:/usr/local/bin/message-writer/areas.yaml -v ./config_fci.yaml:/usr/local/bin/message-writer/config_fci.yaml -v /tmp/:/tmp/ -v /home/murdaca/fci-data/:/eodata/fci-out  message-worker /bin/bash
-```
-
-5. run the following command:
-```
-python3 create_file.py config_fci.yaml /eodata/fci-out/
+docker run -it -v ./areas.yaml:/usr/local/bin/message-writer/areas.yaml -v ./config_fci.yaml:/usr/local/bin/message-writer/config_fci.yaml -v /tmp/:/tmp/ -v /home/murdaca/fci-data/:/eodata/fci-out  message-worker config_fci.yaml /eodata/fci-out/
 ```
 
-Example output of the json (formatted):
+Example output of the json (formatted) from /tmp/list-of-files.json:
 
 ```bash
 [
