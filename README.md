@@ -32,7 +32,7 @@ filepattern: /eodata/fci-out/{start_time:%Y%m%d_%H%M}_{platform_name}_{area}_{pr
   
 5. Run the container mounting the `area file`, the `configuration file` (from point 2) and the folder with the actual products created with satpy
 ```
-podman run -it -v ./areas.yaml:/usr/local/bin/message-writer/areas.yaml -v ./config_fci.yaml:/usr/local/bin/message-writer/config_fci.yaml -v /tmp/:/tmp/ -v /home/murdaca/fci-data/:/eodata/fci-out  message-worker config_fci.yaml /eodata/fci-out/
+podman run -it -v ./areas.yaml:/usr/local/bin/message-writer/areas.yaml -v ./config_fci.yaml:/usr/local/bin/message-writer/config_fci.yaml -v /tmp/:/tmp/ -v /home/murdaca/fci-data/:/eodata/fci-out  message-worker python3 create_file.py config_fci.yaml /eodata/fci-out/
 ```
 
 Example output of the json (formatted) from /tmp/list-of-files.json:
