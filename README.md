@@ -2,17 +2,22 @@
 
 Create json file to be used by the WMS server.
 
-1. Build the container
+1. Clone the repository
 ```
-docker build -t message-worker .
+git clone https://github.com/nordsat/message_writer.git
 ```
-2. Download area file
 
+2. Move to the repository and build the container
+```
+cd message_writer && podman build -t message-worker .
+```
+
+3. Download the area file
 ```
 wget https://github.com/pytroll/satpy/blob/main/satpy/etc/areas.yaml
 ```
 
-3. create the configuration file
+4. Create the configuration file
 Configuration file for the script has the following information:
   - output file name path, for example `/tmp/list-of-files.json`
   - area file path (taken from https://github.com/pytroll/satpy/blob/main/satpy/etc/areas.yaml)
@@ -25,9 +30,9 @@ area_file:  /usr/local/bin/message-writer/areas.yaml
 filepattern: /eodata/fci-out/{start_time:%Y%m%d_%H%M}_{platform_name}_{area}_{product}.tif
 ```
   
-4. Run the container mounting the `area file`, the `configuration file` (from point 2) and the actual products created with satpy
+5. Run the container mounting the `area file`, the `configuration file` (from point 2) and the folder with the actual products created with satpy
 ```
-docker run -it -v ./areas.yaml:/usr/local/bin/message-writer/areas.yaml -v ./config_fci.yaml:/usr/local/bin/message-writer/config_fci.yaml -v /tmp/:/tmp/ -v /home/murdaca/fci-data/:/eodata/fci-out  message-worker config_fci.yaml /eodata/fci-out/
+podman run -it -v ./areas.yaml:/usr/local/bin/message-writer/areas.yaml -v ./config_fci.yaml:/usr/local/bin/message-writer/config_fci.yaml -v /tmp/:/tmp/ -v /home/murdaca/fci-data/:/eodata/fci-out  message-worker config_fci.yaml /eodata/fci-out/
 ```
 
 Example output of the json (formatted) from /tmp/list-of-files.json:
