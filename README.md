@@ -12,10 +12,7 @@ git clone https://github.com/nordsat/message_writer.git
 cd message_writer && podman build -t message-worker .
 ```
 
-3. Download the area file
-```
-wget https://github.com/pytroll/satpy/blob/main/satpy/etc/areas.yaml
-```
+3. Download the area file from https://github.com/pytroll/satpy/blob/main/satpy/etc/areas.yaml
 
 4. Create the configuration file
 Configuration file for the script has the following information:
